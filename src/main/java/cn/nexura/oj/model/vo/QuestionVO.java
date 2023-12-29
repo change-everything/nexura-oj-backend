@@ -4,6 +4,8 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import cn.nexura.oj.model.dto.question.JudgeConfig;
 import cn.nexura.oj.model.entity.Question;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.gson.reflect.TypeToken;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +20,11 @@ import java.util.List;
  */
 @Data
 public class QuestionVO implements Serializable {
+
+    /**
+     * id
+     */
+    private Long id;
 
     /**
      * 标题
