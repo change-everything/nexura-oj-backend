@@ -1,6 +1,5 @@
 package cn.nexura.oj.judege.codesandbox.model;
 
-import cn.nexura.oj.model.dto.questionsubmit.JudgeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,5 +31,10 @@ public class ExecuteCodeResponse {
      * 判题信息
      */
     private JudgeInfo judgeInfo;
+
+    /**
+     * 判题状态
+     */
+    private Integer status;
 
 }

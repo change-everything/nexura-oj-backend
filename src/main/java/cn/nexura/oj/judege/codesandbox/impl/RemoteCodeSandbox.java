@@ -5,13 +5,14 @@ import cn.nexura.oj.judege.codesandbox.model.ExecuteCodeRequest;
 import cn.nexura.oj.judege.codesandbox.model.ExecuteCodeResponse;
 
 /**
- * 第三方代码沙箱
+ * 远程代码沙箱
  * @author peiYP
  * @create 2023-12-31 18:08
  **/
-public class ThirdPartyCodeSandboxImpl implements CodeSandbox {
+public class RemoteCodeSandbox implements CodeSandbox {
     @Override
     public ExecuteCodeResponse doExecute(ExecuteCodeRequest executeCodeRequest) {
+        System.out.println("RemoteCodeSandboxImpl.doExecute");
         return null;
     }
 }

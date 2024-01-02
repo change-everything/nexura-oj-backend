@@ -1,14 +1,12 @@
 package cn.nexura.oj.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import cn.nexura.oj.model.dto.question.JudgeConfig;
-import cn.nexura.oj.model.dto.questionsubmit.JudgeInfo;
+import cn.nexura.oj.judege.codesandbox.model.JudgeInfo;
 import cn.nexura.oj.model.entity.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author PeiYP

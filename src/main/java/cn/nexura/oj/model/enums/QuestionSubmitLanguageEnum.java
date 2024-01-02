@@ -15,8 +15,8 @@ import java.util.List;
 public enum QuestionSubmitLanguageEnum {
 
     JAVA("java", "java"),
-    CPP("c++", "c++"),
-    GOLANG("golang", "golang");
+    CPP("c++", "cpp"),
+    GOLANG("golang", "go");
 
     private final String text;
 
