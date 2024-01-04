@@ -9,11 +9,16 @@ import cn.nexura.oj.constant.UserConstant;
 import cn.nexura.oj.exception.BusinessException;
 import cn.nexura.oj.exception.ThrowUtils;
 import cn.nexura.oj.model.dto.question.*;
+import cn.nexura.oj.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import cn.nexura.oj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import cn.nexura.oj.model.dto.user.UserQueryRequest;
 import cn.nexura.oj.model.entity.Question;
+import cn.nexura.oj.model.entity.QuestionSubmit;
 import cn.nexura.oj.model.entity.User;
+import cn.nexura.oj.model.vo.QuestionSubmitVO;
 import cn.nexura.oj.model.vo.QuestionVO;
 import cn.nexura.oj.service.QuestionService;
+import cn.nexura.oj.service.QuestionSubmitService;
 import cn.nexura.oj.service.UserService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
@@ -28,11 +33,15 @@ import java.util.List;
 /**
  * 题目接口
  *
+ * @author peiYP
  */
 @RestController
 @RequestMapping("/question")
 @Slf4j
 public class QuestionController {
+
+    @Resource
+    private QuestionSubmitService questionSubmitService;
 
     @Resource
     private QuestionService questionService;
@@ -42,7 +51,42 @@ public class QuestionController {
 
     private final static Gson GSON = new Gson();
 
-    // region 增删改查
+
+    /**
+     * 提交题目
+     *
+     * @param questionSubmitAddRequest
+     * @param request
+     */
+    @PostMapping("/submit")
+    public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
+                                               HttpServletRequest request) {
+        if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        final User loginUser = userService.getLoginUser(request);
+        long result = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
+        return ResultUtils.success(result);
+    }
+
+
+    /**
+     * 分页获取题目提交列表（除管理员外，普通用户只能看到非答案、提交代码等公开信息）
+     *
+     * @param questionSubmitQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/submit/list/page")
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
+                                                                         HttpServletRequest request) {
+        long current = questionSubmitQueryRequest.getCurrent();
+        long size = questionSubmitQueryRequest.getPageSize();
+        Page<QuestionSubmit> questionPage = questionSubmitService.page(new Page<>(current, size),
+                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        final User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionPage, loginUser));
+    }
 
     /**
      * 创建

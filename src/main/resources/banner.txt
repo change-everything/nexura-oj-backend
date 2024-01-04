@@ -1,2 +1,18 @@
 by 程序员鱼皮：https://github.com/liyupi
 可能是最好的编程学习圈子：https://yupi.icu
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int maxSum = args[0];
+        int currentSum = args[0];
+
+        for (int i = 1; i < args.length; i++) {
+            currentSum = Math.max(Integer.parseInt(args[i]), Integer.parseInt(currentSum + args[i]));
+            maxSum = Math.max(maxSum, currentSum);
+        }
+        System.out.println("结果：" + maxSum);
+    }
+}
+

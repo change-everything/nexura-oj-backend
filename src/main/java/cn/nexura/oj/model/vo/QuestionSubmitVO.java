@@ -16,6 +16,11 @@ import java.io.Serializable;
 public class QuestionSubmitVO implements Serializable {
 
     /**
+     * id
+     */
+    private Long id;
+
+    /**
      * 编程语言
      */
     private String language;
