@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 帖子点赞接口
  *
+ * @author peiyp
  */
 @RestController
 @RequestMapping("/question_submit")

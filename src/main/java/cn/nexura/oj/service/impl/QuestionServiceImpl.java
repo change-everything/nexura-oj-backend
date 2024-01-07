@@ -1,12 +1,15 @@
 package cn.nexura.oj.service.impl;
 import java.util.List;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.nexura.oj.common.ErrorCode;
 import cn.nexura.oj.constant.CommonConstant;
 import cn.nexura.oj.exception.BusinessException;
 import cn.nexura.oj.exception.ThrowUtils;
+import cn.nexura.oj.model.dto.question.CodeTemplateQuery;
 import cn.nexura.oj.model.dto.question.QuestionQueryRequest;
 import cn.nexura.oj.model.entity.*;
+import cn.nexura.oj.model.enums.QuestionSubmitLanguageEnum;
 import cn.nexura.oj.model.vo.QuestionVO;
 import cn.nexura.oj.model.vo.UserVO;
 import cn.nexura.oj.service.UserService;
@@ -157,6 +160,24 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         }).collect(Collectors.toList());
         questionVOPage.setRecords(questionVOList);
         return questionVOPage;
+    }
+
+    @Override
+    public String getCodeTemplate(CodeTemplateQuery codeTemplateQuery) {
+
+        String language = codeTemplateQuery.getLanguage();
+
+        String title = codeTemplateQuery.getTitle();
+
+        if (QuestionSubmitLanguageEnum.JAVA.getValue().equals(language)) {
+            return ResourceUtil.readUtf8Str("classpath:/codeTemplate/CodeTemplate.java");
+        } else if (QuestionSubmitLanguageEnum.CPP.getValue().equals(language)) {
+            return ResourceUtil.readUtf8Str("classpath:/codeTemplate/CodeTemplate.cpp");
+        } else if (QuestionSubmitLanguageEnum.GOLANG.getValue().equals(language)) {
+            return ResourceUtil.readUtf8Str("classpath:/codeTemplate/CodeTemplate.go");
+        }
+
+        return ResourceUtil.readUtf8Str("classpath:/codeTemplate/CodeTemplate.java");
     }
 
 }

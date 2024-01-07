@@ -6,6 +6,7 @@ import cn.nexura.oj.model.dto.question.JudgeConfig;
 import cn.nexura.oj.judege.codesandbox.model.JudgeInfo;
 import cn.nexura.oj.model.entity.Question;
 import cn.nexura.oj.model.enums.JudgeInfoMessageEnum;
+import cn.nexura.oj.model.enums.QuestionSubmitStatusEnum;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
         if (outputList.size() != inputList.size()) {
             messageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
             judgeInfoResponse.setMessage(messageEnum.getValue());
+            judgeInfoResponse.setStatus(QuestionSubmitStatusEnum.FAILED.getValue());
             return judgeInfoResponse;
         }
 
@@ -44,6 +46,7 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
             if (!judgeCase.getOutput().equals(outputList.get(i))) {
                 messageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
                 judgeInfoResponse.setMessage(messageEnum.getValue());
+                judgeInfoResponse.setStatus(QuestionSubmitStatusEnum.FAILED.getValue());
                 return judgeInfoResponse;
             }
         }
@@ -55,19 +58,22 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
         Long needMemoryLimit = judgeConfig.getMemoryLimit();
         Long needTimeLimit = judgeConfig.getTimeLimit();
         // 判断是否超出限制
-        if (memory > needMemoryLimit) {
+        if (memory > needMemoryLimit * 1024 * 1024) {
             messageEnum = JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEEDED;
             judgeInfoResponse.setMessage(messageEnum.getValue());
+            judgeInfoResponse.setStatus(QuestionSubmitStatusEnum.FAILED.getValue());
             return judgeInfoResponse;
         }
 
         if (time > needTimeLimit) {
             messageEnum = JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEEDED;
             judgeInfoResponse.setMessage(messageEnum.getValue());
+            judgeInfoResponse.setStatus(QuestionSubmitStatusEnum.FAILED.getValue());
             return judgeInfoResponse;
         }
 
         judgeInfoResponse.setMessage(messageEnum.getValue());
+        judgeInfoResponse.setStatus(QuestionSubmitStatusEnum.SUCCESS.getValue());
         return judgeInfoResponse;
     }
 }

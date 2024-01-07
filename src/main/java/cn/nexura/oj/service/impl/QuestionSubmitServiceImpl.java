@@ -35,8 +35,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -157,8 +159,22 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         if (CollectionUtils.isEmpty(questionSubmitList)) {
             return questionSubmitVOPage;
         }
+        Set<Long> questionIds = questionSubmitList.stream()
+                .map(QuestionSubmit::getQuestionId)
+                .collect(Collectors.toSet());
+        Map<Long, QuestionVO> questionVOMap = questionService.listByIds(questionIds).stream()
+                .map(QuestionVO::objToVo)
+                .collect(Collectors.toMap(QuestionVO::getId, Function.identity()));
+
+
         List<QuestionSubmitVO> questionSubmitVOList = questionSubmitList.stream()
-                .map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))
+                .map(questionSubmit -> {
+                    QuestionSubmitVO questionSubmitVO = getQuestionSubmitVO(questionSubmit, loginUser);
+                    questionSubmitVO.setUserName(userService.getById(questionSubmitVO.getUserId()).getUserName());
+                    questionSubmitVO.setStatusStr(Objects.requireNonNull(QuestionSubmitStatusEnum.getEnumByValue(questionSubmitVO.getStatus())).getText());
+                    questionSubmitVO.setQuestionVO(questionVOMap.getOrDefault(questionSubmitVO.getQuestionId(), null));
+                    return questionSubmitVO;
+                })
                 .collect(Collectors.toList());
         questionSubmitVOPage.setRecords(questionSubmitVOList);
         return questionSubmitVOPage;

@@ -1,5 +1,6 @@
 package cn.nexura.oj.service;
 
+import cn.nexura.oj.model.dto.question.CodeTemplateQuery;
 import cn.nexura.oj.model.dto.question.QuestionQueryRequest;
 import cn.nexura.oj.model.entity.Question;
 import cn.nexura.oj.model.entity.Question;
@@ -50,5 +51,12 @@ public interface QuestionService extends IService<Question> {
      * @return
      */
     Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
-    
+
+
+    /**
+     * 获取代码模板
+     * @param codeTemplateQuery
+     * @return
+     */
+    String getCodeTemplate(CodeTemplateQuery codeTemplateQuery);
 }

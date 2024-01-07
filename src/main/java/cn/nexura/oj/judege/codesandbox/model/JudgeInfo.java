@@ -25,4 +25,9 @@ public class JudgeInfo {
      */
     private Long time;
 
+    /**
+     * 状态
+     */
+    private Integer status;
+
 }

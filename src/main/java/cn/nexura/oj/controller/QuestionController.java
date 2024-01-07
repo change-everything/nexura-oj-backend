@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 题目接口
@@ -50,6 +51,13 @@ public class QuestionController {
     private UserService userService;
 
     private final static Gson GSON = new Gson();
+
+
+    @PostMapping("/codeTemplate")
+    public BaseResponse<String> getCodeTemplate(@RequestBody CodeTemplateQuery codeTemplateQuery) {
+        String templateCode =  questionService.getCodeTemplate(codeTemplateQuery);
+        return ResultUtils.success(templateCode);
+    }
 
 
     /**
@@ -327,6 +335,12 @@ public class QuestionController {
         long size = questionQueryRequest.getPageSize();
         Page<Question> questionPage = questionService.page(new Page<>(current, size),
                 questionService.getQueryWrapper(questionQueryRequest));
+        List<Question> records = questionPage.getRecords();
+        records = records.stream()
+                .peek(question ->
+                        question.setUserName(userService.getById(question.getUserId()).getUserName()))
+                .collect(Collectors.toList());
+        questionPage.setRecords(records);
         return ResultUtils.success(questionPage);
     }
 

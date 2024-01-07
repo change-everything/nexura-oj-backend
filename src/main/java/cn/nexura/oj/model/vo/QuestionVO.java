@@ -1,17 +1,13 @@
 package cn.nexura.oj.model.vo;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
+import cn.nexura.oj.model.dto.question.CodeTemplateQuery;
 import cn.nexura.oj.model.dto.question.JudgeConfig;
 import cn.nexura.oj.model.entity.Question;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.google.gson.reflect.TypeToken;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,7 +66,6 @@ public class QuestionVO implements Serializable {
      * 创建用户 id
      */
     private Long userId;
-
 
     /**
      * 关联用户信息

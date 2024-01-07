@@ -41,6 +41,11 @@ public class QuestionSubmitVO implements Serializable {
     private Integer status;
 
     /**
+     * 判题状态
+     */
+    private String statusStr;
+
+    /**
      * 题目 id
      */
     private Long questionId;
@@ -49,6 +54,11 @@ public class QuestionSubmitVO implements Serializable {
      * 创建用户 id
      */
     private Long userId;
+
+    /**
+     * 用户名
+     */
+    private String userName;
 
     /**
      * 提交者信息
