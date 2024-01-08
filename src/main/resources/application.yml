@@ -1,7 +1,9 @@
 # 公共配置文件
 spring:
+  main:
+    allow-circular-references: true
   application:
-    name: springboot-init
+    name: nexura-oj-backend
   # 默认 dev 环境
   profiles:
     active: dev

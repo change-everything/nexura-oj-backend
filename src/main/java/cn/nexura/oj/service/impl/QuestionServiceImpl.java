@@ -9,12 +9,17 @@ import cn.nexura.oj.exception.ThrowUtils;
 import cn.nexura.oj.model.dto.question.CodeTemplateQuery;
 import cn.nexura.oj.model.dto.question.QuestionQueryRequest;
 import cn.nexura.oj.model.entity.*;
+import cn.nexura.oj.model.enums.JudgeInfoMessageEnum;
 import cn.nexura.oj.model.enums.QuestionSubmitLanguageEnum;
+import cn.nexura.oj.model.enums.QuestionSubmitStatusEnum;
+import cn.nexura.oj.model.vo.QuestionSubmitVO;
 import cn.nexura.oj.model.vo.QuestionVO;
 import cn.nexura.oj.model.vo.UserVO;
+import cn.nexura.oj.service.QuestionSubmitService;
 import cn.nexura.oj.service.UserService;
 import cn.nexura.oj.utils.SqlUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.nexura.oj.service.QuestionService;
@@ -43,6 +48,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private QuestionSubmitService questionSubmitService;
 
     @Override
     public void validQuestion(Question question, boolean add) {
@@ -147,15 +155,36 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
 
+        // 过滤所有的questionId
+        List<Long> questionIds = questionList.stream()
+                .map(Question::getId)
+                .collect(Collectors.toList());
+
+        // 查询每个题目的提交信息
+        List<QuestionSubmit> questionSubmitList = questionSubmitService.list(Wrappers.lambdaQuery(QuestionSubmit.class)
+                .in(QuestionSubmit::getQuestionId, questionIds));
+
+        Map<Long, List<QuestionSubmit>> submitListMap = questionSubmitList.stream()
+                .collect(Collectors.groupingBy(QuestionSubmit::getQuestionId));
+
+
         // 填充信息
         List<QuestionVO> questionVOList = questionList.stream().map(question -> {
             QuestionVO questionVO = QuestionVO.objToVo(question);
             Long userId = question.getUserId();
+            Long questionId = question.getId();
             User user = null;
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
             questionVO.setUser(userService.getUserVO(user));
+            List<QuestionSubmit> questionSubmits = submitListMap.getOrDefault(questionId, new ArrayList<>());
+            long acSubmitCount = questionSubmits.stream().filter(questionSubmit -> {
+                QuestionSubmitVO questionSubmitVO = QuestionSubmitVO.objToVo(questionSubmit);
+                return JudgeInfoMessageEnum.ACCEPTED.getValue().equals(questionSubmitVO.getJudgeInfo().getMessage());
+            }).count();
+            questionVO.setSubmitNum(questionSubmits.size());
+            questionVO.setAcceptedNum((int) acSubmitCount);
             return questionVO;
         }).collect(Collectors.toList());
         questionVOPage.setRecords(questionVOList);
