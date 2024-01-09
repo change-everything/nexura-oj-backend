@@ -96,24 +96,24 @@ public class QuestionSolutionServiceImpl extends ServiceImpl<QuestionSolutionMap
         } else {
             solutionUserMap = new HashMap<>();
         }
-        // 拿到题目map
-        Set<Long> questionIdSet = questionSolutionList.stream()
-                .map(QuestionSolution::getQuestionId)
-                .collect(Collectors.toSet());
-        List<Question> questions = questionService.listByIds(questionIdSet);
-        Map<Long, QuestionVO> solutionQuestionMap;
-        if (!questions.isEmpty()) {
-            solutionQuestionMap = questions.stream()
-                    .map(QuestionVO::objToVo)
-                    .collect(Collectors.toMap(QuestionVO::getId, Function.identity()));
-        } else {
-            solutionQuestionMap = new HashMap<>();
-        }
+//        // 拿到题目map
+//        Set<Long> questionIdSet = questionSolutionList.stream()
+//                .map(QuestionSolution::getQuestionId)
+//                .collect(Collectors.toSet());
+//        List<Question> questions = questionService.listByIds(questionIdSet);
+//        Map<Long, QuestionVO> solutionQuestionMap;
+//        if (!questions.isEmpty()) {
+//            solutionQuestionMap = questions.stream()
+//                    .map(QuestionVO::objToVo)
+//                    .collect(Collectors.toMap(QuestionVO::getId, Function.identity()));
+//        } else {
+//            solutionQuestionMap = new HashMap<>();
+//        }
 
         // 设置题目信息,用户信息
         questionSolutionList = questionSolutionList.stream()
                 .peek(questionSolution -> {
-                    questionSolution.setQuestionVO(solutionQuestionMap.getOrDefault(questionSolution.getQuestionId(), null));
+//                    questionSolution.setQuestionVO(solutionQuestionMap.getOrDefault(questionSolution.getQuestionId(), null));
                     questionSolution.setUserVO(solutionUserMap.getOrDefault(questionSolution.getUserId(), null));
                 })
                 .collect(Collectors.toList());

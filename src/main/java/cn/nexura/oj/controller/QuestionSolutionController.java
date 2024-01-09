@@ -1,38 +1,29 @@
 package cn.nexura.oj.controller;
 
-import cn.nexura.oj.annotation.AuthCheck;
+import cn.hutool.json.JSONUtil;
 import cn.nexura.oj.common.BaseResponse;
-import cn.nexura.oj.common.DeleteRequest;
 import cn.nexura.oj.common.ErrorCode;
 import cn.nexura.oj.common.ResultUtils;
-import cn.nexura.oj.constant.UserConstant;
 import cn.nexura.oj.exception.BusinessException;
 import cn.nexura.oj.exception.ThrowUtils;
-import cn.nexura.oj.model.dto.question.*;
 import cn.nexura.oj.model.dto.questionsolution.QuestionSolutionAddRequest;
 import cn.nexura.oj.model.dto.questionsolution.QuestionSolutionQueryRequest;
-import cn.nexura.oj.model.dto.questionsubmit.QuestionSubmitAddRequest;
-import cn.nexura.oj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import cn.nexura.oj.model.entity.Question;
 import cn.nexura.oj.model.entity.QuestionSolution;
-import cn.nexura.oj.model.entity.QuestionSubmit;
 import cn.nexura.oj.model.entity.User;
-import cn.nexura.oj.model.vo.QuestionSubmitVO;
 import cn.nexura.oj.model.vo.QuestionVO;
 import cn.nexura.oj.service.QuestionService;
 import cn.nexura.oj.service.QuestionSolutionService;
-import cn.nexura.oj.service.QuestionSubmitService;
 import cn.nexura.oj.service.UserService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.keyvalue.repository.KeyValueRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 题目解析接口
@@ -70,6 +61,11 @@ public class QuestionSolutionController {
         BeanUtils.copyProperties(questionSolutionAddRequest, questionSolution);
         User loginUser = userService.getLoginUser(request);
         questionSolution.setUserId(loginUser.getId());
+        List<String> tags = questionSolutionAddRequest.getTags();
+        if (tags != null) {
+            questionSolution.setTags(JSONUtil.toJsonStr(tags));
+        }
+
 //        questionSolution.setFavourNum(0);
 //        questionSolution.setThumbNum(0);
         boolean result = questionSolutionService.save(questionSolution);

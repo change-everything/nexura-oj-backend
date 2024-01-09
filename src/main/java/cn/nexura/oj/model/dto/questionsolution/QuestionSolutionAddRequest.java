@@ -30,6 +30,11 @@ public class QuestionSolutionAddRequest implements Serializable {
      */
     private Long questionId;
 
+    /**
+     * 标签
+     */
+    private List<String> tags;
+
 
 
     private static final long serialVersionUID = 1L;

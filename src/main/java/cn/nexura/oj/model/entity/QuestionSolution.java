@@ -59,8 +59,7 @@ public class QuestionSolution implements Serializable {
     /**
      * 题目信息
      */
-    @TableField(exist = false)
-    private QuestionVO questionVO;
+    private String tags;
 
     /**
      * 逻辑删除
