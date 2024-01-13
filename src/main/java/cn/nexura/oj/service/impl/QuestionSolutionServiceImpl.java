@@ -66,11 +66,13 @@ public class QuestionSolutionServiceImpl extends ServiceImpl<QuestionSolutionMap
         Long userId = questionQueryRequest.getUserId();
         String sortField = questionQueryRequest.getSortField();
         String sortOrder = questionQueryRequest.getSortOrder();
+        Long questionId = questionQueryRequest.getQuestionId();
 
 
         queryWrapper.like(StringUtils.isNotBlank(title), "title", title);
         queryWrapper.eq(ObjectUtils.isNotEmpty(solutionId), "solution_id", solutionId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "question_id", questionId);
         queryWrapper.eq("is_delete", false);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
@@ -82,6 +84,10 @@ public class QuestionSolutionServiceImpl extends ServiceImpl<QuestionSolutionMap
 
         // 拿到题解列表
         List<QuestionSolution> questionSolutionList = questionSolutionPage.getRecords();
+
+        if (questionSolutionList.isEmpty()) {
+            return questionSolutionPage;
+        }
 
         // 拿到用户map
         Set<Long> userIdSet = questionSolutionList.stream()
@@ -96,19 +102,6 @@ public class QuestionSolutionServiceImpl extends ServiceImpl<QuestionSolutionMap
         } else {
             solutionUserMap = new HashMap<>();
         }
-//        // 拿到题目map
-//        Set<Long> questionIdSet = questionSolutionList.stream()
-//                .map(QuestionSolution::getQuestionId)
-//                .collect(Collectors.toSet());
-//        List<Question> questions = questionService.listByIds(questionIdSet);
-//        Map<Long, QuestionVO> solutionQuestionMap;
-//        if (!questions.isEmpty()) {
-//            solutionQuestionMap = questions.stream()
-//                    .map(QuestionVO::objToVo)
-//                    .collect(Collectors.toMap(QuestionVO::getId, Function.identity()));
-//        } else {
-//            solutionQuestionMap = new HashMap<>();
-//        }
 
         // 设置题目信息,用户信息
         questionSolutionList = questionSolutionList.stream()

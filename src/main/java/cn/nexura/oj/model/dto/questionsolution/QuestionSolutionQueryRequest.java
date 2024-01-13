@@ -1,6 +1,7 @@
 package cn.nexura.oj.model.dto.questionsolution;
 
 import cn.nexura.oj.common.PageRequest;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +31,11 @@ public class QuestionSolutionQueryRequest extends PageRequest implements Seriali
      * 创建用户 id
      */
     private Long userId;
+
+    /**
+     * 题号
+     */
+    private Long questionId;
 
 
     private static final long serialVersionUID = 1L;

@@ -20,16 +20,16 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/nexura_oj
-    username: root
-    password: 123456
+    url: jdbc:mysql://localhost:3306/xx
+    username: xxx
+    password: xxx
   # Redis 配置
   redis:
     database: 1
-    host: 120.46.207.211
-    port: 6379
+    host: xxxxx
+    port: xxxx
     timeout: 5000
-    password: tjdxdykw.123
+    password: xxxxx
   # Elasticsearch 配置
 #  elasticsearch:
 #    uris: http://43.143.20.63:9200
