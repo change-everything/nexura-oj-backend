@@ -13,7 +13,7 @@
     </parent>
     <groupId>cn.nexura</groupId>
     <artifactId>nexura-oj-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>nexura-oj-backend</name>
     <properties>
         <java.version>1.8</java.version>

@@ -1,6 +1,5 @@
 package cn.nexura.oj.model.enums;
 
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Arrays;
@@ -18,7 +17,8 @@ public enum QuestionSubmitStatusEnum {
     WAITING("等待中", 0),
     RUNNING("运行中", 1),
     SUCCESS("成功", 2),
-    FAILED("失败", 3);
+    FAILED("失败", 3),
+    COMPLICATE_FAILED("编译失败", 4);
 
     private final String text;
 

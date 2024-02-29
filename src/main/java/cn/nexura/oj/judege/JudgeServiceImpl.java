@@ -90,6 +90,17 @@ public class JudgeServiceImpl implements JudgeService {
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.doExecute(executeCodeRequest);
 
+        Integer status = executeCodeResponse.getStatus();
+
+        if (status == null) {
+            questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.COMPLICATE_FAILED.getValue());
+            update = questionSubmitService.updateById(questionSubmitUpdate);
+            if (!update) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "题目状态更新错误");
+            }
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "编译失败");
+        }
+
         // 根据执行结果，判断题目是否正确
         List<String> outputList = executeCodeResponse.getOutput();
 
@@ -108,7 +119,7 @@ public class JudgeServiceImpl implements JudgeService {
         // 更新题目状态
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
-        questionSubmitUpdate.setStatus(executeCodeResponse.getStatus());
+        questionSubmitUpdate.setStatus(status);
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
         update = questionSubmitService.updateById(questionSubmitUpdate);
         if (!update) {

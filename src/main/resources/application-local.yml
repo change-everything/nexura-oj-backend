@@ -4,9 +4,6 @@ spring:
     allow-circular-references: true
   application:
     name: nexura-oj-backend
-  # 默认 dev 环境
-  profiles:
-    active: prod
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -20,21 +17,21 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/xx
-    username: xxx
-    password: xxx
+    url: jdbc:mysql://localhost:3306/nexura_oj
+    username: root
+    password: 123456
   # Redis 配置
   redis:
     database: 1
-    host: xxxxx
-    port: xxxx
+    host: 119.3.252.5
+    port: 37690
     timeout: 5000
-    password: xxxxx
+    password: 8VU4pvAlo68v
   # Elasticsearch 配置
-#  elasticsearch:
-#    uris: http://43.143.20.63:9200
-#    username: root
-#    password: 123456
+  #  elasticsearch:
+  #    uris: http://43.143.20.63:9200
+  #    username: root
+  #    password: 123456
   # 文件上传
   servlet:
     multipart:
@@ -51,7 +48,7 @@ server:
         max-age: 2592000
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false
+    map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:

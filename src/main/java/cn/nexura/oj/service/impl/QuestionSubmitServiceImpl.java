@@ -142,10 +142,10 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
 
         queryWrapper.eq(ObjectUtils.isNotEmpty(language), "language", language);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "question_id", questionId);
         queryWrapper.eq(QuestionSubmitStatusEnum.getEnumByValue(status) != null, "status", status);
-        queryWrapper.eq("isDelete", false);
+        queryWrapper.eq("is_delete", false);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
